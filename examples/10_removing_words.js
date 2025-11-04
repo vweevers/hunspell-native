@@ -1,4 +1,4 @@
-const Nodehun = require('bindings')('Nodehun')
+const Nodehun = require('../')
 const dictionaries = require('./dictionaries')
 
 let nodehun
