@@ -88,7 +88,7 @@ Napi::Object Nodehun::NewInstance(const Napi::CallbackInfo& info) {
   } else if (!info.IsConstructCall()) {
     Napi::Error::New(env, INVALID_CONSTRUCTOR_CALL).ThrowAsJavaScriptException();
   }
-  
+
   if (env.IsExceptionPending()) {
     return Napi::Object::New(env);
   } else {
@@ -113,7 +113,7 @@ Napi::Value Nodehun::addDictionarySync(const Napi::CallbackInfo& info) {
     std::string dictionary = info[0].ToString().Utf8Value();
 
     context->instance->add_dic(dictionary.c_str());
-    
+
     return env.Undefined();
   }
 }
@@ -188,7 +188,7 @@ Napi::Value Nodehun::spellSync(const Napi::CallbackInfo& info) {
     context->lockRead();
     bool correct = context->instance->spell(word);
     context->unlockRead();
-    
+
     return Napi::Boolean::New(env, correct);
   }
 }
@@ -235,16 +235,16 @@ Napi::Value Nodehun::suggestSync(const Napi::CallbackInfo& info) {
 
     context->lockRead();
     bool isCorrect = this->context->instance->spell(word);
-    
+
     if (isCorrect) {
       context->unlockRead();
       return env.Null();
     }
-    
+
     std::vector<std::string> suggestions = this->context->instance->suggest(word);
-    uint length = suggestions.size();
+    size_t length = suggestions.size();
     context->unlockRead();
-    
+
     Napi::Array array = Napi::Array::New(env, length);
     for (int i = 0; i < length; i++) {
       array.Set(i, Napi::String::New(env, suggestions[i]));
@@ -298,7 +298,7 @@ Napi::Value Nodehun::analyzeSync(const Napi::CallbackInfo& info) {
     this->context->lockRead();
     int length = this->context->instance->analyze(&analysis, word.c_str());
     this->context->unlockRead();
-    
+
     Napi::Array array = Napi::Array::New(env, length);
     for (int i = 0; i < length; i++) {
       array.Set(i, Napi::String::New(env, analysis[i]));
@@ -354,7 +354,7 @@ Napi::Value Nodehun::stemSync(const Napi::CallbackInfo& info) {
     context->lockRead();
     int length = this->context->instance->stem(&stems, word.c_str());
     context->unlockRead();
-    
+
     Napi::Array array = Napi::Array::New(env, length);
     for (int i = 0; i < length; i++) {
       array.Set(i, Napi::String::New(env, stems[i]));
@@ -424,12 +424,12 @@ Napi::Value Nodehun::generateSync(const Napi::CallbackInfo& info) {
       example.c_str()
     );
     context->unlockRead();
-    
+
     Napi::Array array = Napi::Array::New(env, length);
     for (int i = 0; i < length; i++) {
       array.Set(i, Napi::String::New(env, generates[i]));
     }
-    
+
     context->instance->free_list(&generates, length);
 
     return array;
@@ -447,7 +447,7 @@ Napi::Value Nodehun::addSync(const Napi::CallbackInfo& info) {
   } else if (!info[0].IsString()) {
     Napi::Error error = Napi::Error::New(env, INVALID_FIRST_ARGUMENT);
     error.ThrowAsJavaScriptException();
-    
+
     return error.Value();
   } else {
     std::string word = info[0].ToString().Utf8Value();
@@ -455,7 +455,7 @@ Napi::Value Nodehun::addSync(const Napi::CallbackInfo& info) {
     context->lockWrite();
     context->instance->add(word.c_str());
     context->unlockWrite();
-    
+
     return env.Undefined();
   }
 
@@ -498,7 +498,7 @@ Napi::Value Nodehun::addWithAffixSync(const Napi::CallbackInfo& info) {
   } else if (!info[0].IsString()) {
     Napi::Error error = Napi::Error::New(env, INVALID_FIRST_ARGUMENT);
     error.ThrowAsJavaScriptException();
-    
+
     return error.Value();
   } else if (!info[1].IsString()) {
     Napi::Error error = Napi::Error::New(env, INVALID_SECOND_ARGUMENT);
@@ -512,7 +512,7 @@ Napi::Value Nodehun::addWithAffixSync(const Napi::CallbackInfo& info) {
     context->lockWrite();
     context->instance->add_with_affix(word.c_str(), example.c_str());
     context->unlockWrite();
-    
+
     return env.Undefined();
   }
 
@@ -560,7 +560,7 @@ Napi::Value Nodehun::removeSync(const Napi::CallbackInfo& info) {
   } else if (!info[0].IsString()) {
     Napi::Error error = Napi::Error::New(env, INVALID_FIRST_ARGUMENT);
     error.ThrowAsJavaScriptException();
-    
+
     return error.Value();
   } else {
     std::string word = info[0].ToString().Utf8Value();
@@ -568,7 +568,7 @@ Napi::Value Nodehun::removeSync(const Napi::CallbackInfo& info) {
     context->lockWrite();
     context->instance->remove(word.c_str());
     context->unlockWrite();
-    
+
     return env.Undefined();
   }
 
@@ -610,7 +610,7 @@ Napi::Value Nodehun::getDictionaryEncoding(const Napi::CallbackInfo& info) {
   }
 
   char* encoding = this->context->instance->get_dic_encoding();
-  
+
   if (encoding == NULL) {
     return env.Undefined();
   } else {
@@ -629,7 +629,7 @@ Napi::Value Nodehun::getWordCharacters(const Napi::CallbackInfo& info) {
   }
 
   const std::string wordCharacters = this->context->instance->get_wordchars_cpp();
-  
+
   if (wordCharacters.empty()) {
     return env.Undefined();
   } else {
