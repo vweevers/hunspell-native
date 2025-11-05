@@ -275,6 +275,8 @@ cd ../../
 npm run start
 ```
 
+The build applies a [patch](./patches/001-static-cast.patch) to the hunspell submodule, to replace `dynamic_cast` with `static_cast` removing the need for RTTI.
+
 ## <a id="development-scripts"></a>Scripts
 
 The following is a a list of commands and their descriptions which may
