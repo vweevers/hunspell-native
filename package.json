@@ -23,7 +23,8 @@
     "Thomas Beverley <tom.beverley101@gmail.com>",
     "Bjarke Bech <bjarkebech@gmail.com>"
   ],
-  "main": "build/Release/Nodehun",
+  "type": "commonjs",
+  "main": "index.js",
   "types": "src/Nodehun.d.ts",
   "gypfile": true,
   "dependencies": {
