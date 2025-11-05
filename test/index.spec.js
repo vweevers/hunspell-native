@@ -1,26 +1,23 @@
-import { fail, strictEqual, throws, deepEqual, notEqual } from "assert"
+const { fail, strictEqual, throws, deepEqual, notEqual } = require('node:assert')
+const { describe, it, beforeEach } = require('node:test')
+const path = require('node:path')
+const { Nodehun } = require('../')
 
-const Nodehun = require('bindings')('Nodehun')
-const path = require('path')
 const enUS = {
-    affix: path.resolve(__dirname, './dictionaries/en_us.aff'),
-    dictionary: path.resolve(__dirname, './dictionaries/en_us.dic')
+    affix: path.join(__dirname, './dictionaries/en_us.aff'),
+    dictionary: path.join(__dirname, './dictionaries/en_us.dic')
 }
 const enGB = {
-    affix: path.resolve(__dirname, './dictionaries/en_gb.aff'),
-    dictionary: path.resolve(__dirname, './dictionaries/en_gb.dic')
+    affix: path.join(__dirname, './dictionaries/en_gb.aff'),
+    dictionary: path.join(__dirname, './dictionaries/en_gb.dic')
 }
 const fr = {
-    dictionary: path.resolve(__dirname, './dictionaries/fr.dic')
+    dictionary: path.join(__dirname, './dictionaries/fr.dic')
 }
 const nl = {
-    affix: path.resolve(__dirname, './dictionaries/nl.aff'),
-    dictionary: path.resolve(__dirname, './dictionaries/nl.dic')
+    affix: path.join(__dirname, './dictionaries/nl.aff'),
+    dictionary: path.join(__dirname, './dictionaries/nl.dic')
 }
-const daDK = {
-  affix: path.resolve(__dirname, "./dictionaries/da_DK.aff"),
-  dictionary: path.resolve(__dirname, "./dictionaries/da_DK.dic"),
-};
 
 describe('Nodehun(affixBuffer, dictionaryBuffer)', () => {
     it(`should export a function`, () => {
@@ -55,17 +52,15 @@ describe('Nodehun(affixBuffer, dictionaryBuffer)', () => {
         new Nodehun(enUS.affix, enUS.dictionary)
     })
 
-    // FIXME
+    it(`should construct an object of type Nodehun`, () => {
+        const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
-    // it(`should construct an object of type Nodehun`, () => {
-    //     const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
-
-    //     strictEqual(nodehun instanceof Nodehun, true)
-    // })
+        strictEqual(nodehun instanceof Nodehun, true)
+    })
 })
 
 describe('Nodehun#spell(word)', () => {
-    let nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    let nodehun = new Nodehun(enUS.affix, enUS.dictionary);
 
     it(`should be a function`, async () => {
         strictEqual(typeof nodehun.spell, 'function')
@@ -78,7 +73,7 @@ describe('Nodehun#spell(word)', () => {
             .then(() => { })
             .catch(() => { })
             .finally(() => { success = true })
-        
+
         strictEqual(success, true)
     })
 
@@ -161,87 +156,87 @@ describe('Nodehun#spellSync(word)', () => {
     it(`should return 'false' when a word is not correctly spelled`, () => {
         strictEqual(nodehun.spellSync('colour'), false)
     })
-  
+
     it(`should return 'true' when a word is correctly spelled (1)`, () => {
         strictEqual(nodehun.spellSync('color'), true)
     })
-  
+
     it(`should return 'true' when a word is correctly spelled (2)`, () => {
         strictEqual(nodehun.spellSync('c'), true)
     })
-  
+
     it(`should return 'true' without word`, () => {
         strictEqual(nodehun.spellSync(' '), true)
     })
-  
+
     it(`should return 'true' for non-words`, () => {
         strictEqual(nodehun.spellSync('.'), true)
     })
-  
+
     it(`should check for sentence-case when upper-case (ok)`, () => {
         strictEqual(nodehun.spellSync('ABDUL'), true)
     })
-  
+
     it(`should check for sentence-case when upper-case (not ok)`, () => {
         strictEqual(nodehun.spellSync('COLOUR'), false)
     })
-  
+
     it(`should check for lower-case (ok)`, () => {
         strictEqual(nodehun.spellSync('Color'), true)
     })
-  
+
     it(`should check for lower-case (not ok)`, () => {
         strictEqual(nodehun.spellSync('Colour'), false)
     })
-  
+
     it(`should check for lower-case (not ok)`, () => {
         strictEqual(nodehun.spellSync('Colour'), false)
     })
-  
+
     it(`should not check upper-case for sentence-case when KEEPCASE`, () => {
         strictEqual(nodehunNL.spellSync('DVD'), false)
     })
-  
+
     it(`should not check other casing for lower-case when KEEPCASE`, () => {
         strictEqual(nodehunNL.spellSync('dVd'), false)
     })
-  
+
     it(`should support ONLYINCOMPOUND (ok)`, () => {
         strictEqual(nodehunNL.spellSync('eierlevendbarend'), true)
     })
-  
+
     it(`should support ONLYINCOMPOUND (not ok)`, () => {
         strictEqual(nodehunNL.spellSync('eier'), false)
     })
-  
+
     it(`should support compounds (1)`, () => {
         strictEqual(nodehun.spellSync('21st'), true)
     })
-  
+
     it(`should support compounds (2)`, () => {
         strictEqual(nodehun.spellSync('20st'), false)
     })
-  
+
     it(`should support compounds (3)`, () => {
         strictEqual(nodehun.spellSync('20th'), true)
     })
-  
+
     it(`should support compounds (4)`, () => {
         strictEqual(nodehun.spellSync('23st'), false)
     })
-  
+
     it(`should support compounds (5)`, () => {
         strictEqual(nodehun.spellSync('23th'), false)
     })
-  
+
     it(`should support compounds (6)`, () => {
         strictEqual(nodehun.spellSync('23rd'), true)
     })
-  
+
     it(`should support compounds (7)`, () => {
         strictEqual(nodehun.spellSync('12th'), true)
     })
-  
+
     it(`should support compounds (8)`, () => {
         strictEqual(nodehun.spellSync('22nd'), true)
     })
@@ -368,26 +363,26 @@ describe('Nodehun#suggestSync(word)', () => {
     });
 
     it(`should suggest switches`, () => {
-        const suggestions: Array<string> = nodehun.suggestSync('cloor')
-        
+        const suggestions = nodehun.suggestSync('cloor')
+
         strictEqual(suggestions.includes('color'), true)
     });
 
     it(`should suggest insertions`, () => {
-        const suggestions: Array<string> = nodehun.suggestSync('coor')
-        
+        const suggestions = nodehun.suggestSync('coor')
+
         strictEqual(suggestions.includes('color'), true)
     });
 
     it(`should not suggest alternatives marked with 'NOSUGGEST'`, () => {
-        const suggestions: Array<string> = nodehun.suggestSync('bulshit')
+        const suggestions = nodehun.suggestSync('bulshit')
 
         strictEqual(suggestions.includes('bullshit') || suggestions.includes('Bullshit'), false)
     });
 
     it(`should suggest based on replacements`, () => {
-        const suggestions: Array<string> = nodehun.suggestSync('consize')
-        
+        const suggestions = nodehun.suggestSync('consize')
+
         strictEqual(suggestions.includes('concise'), true)
     });
 
@@ -404,7 +399,7 @@ describe('Nodehun#suggestSync(word)', () => {
 })
 
 describe('Nodehun#suggest(word)', () => {
-    let nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    let nodehun = new Nodehun(enUS.affix, enUS.dictionary);
 
     it(`should be a function`, async () => {
         strictEqual(typeof nodehun.suggest, 'function')
@@ -417,7 +412,7 @@ describe('Nodehun#suggest(word)', () => {
             .then(() => { })
             .catch(() => { })
             .finally(() => { success = true })
-            
+
         strictEqual(success, true)
     })
 
@@ -457,7 +452,7 @@ describe('Nodehun#suggest(word)', () => {
         strictEqual(typeof value, 'object')
         strictEqual(typeof value.length, 'number')
     })
-    
+
     it(`should return appropriate suggestions when a word is spelled incorrectly`, async () => {
         const value = await nodehun.suggest('colour')
         deepEqual(value.splice(0, 3), ['color', 'co lour', 'co-lour'])
@@ -470,13 +465,13 @@ describe('Nodehun#suggest(word)', () => {
 })
 
 describe('Nodehun#add(word)', () => {
-    let nodehun: Nodehun
+    let nodehun
 
     beforeEach(() => {
         // clear changes before each test
         nodehun = new Nodehun(enUS.affix, enUS.dictionary)
     })
-        
+
     it(`should be a function`, async () => {
         strictEqual(typeof nodehun.add, 'function')
     })
@@ -488,7 +483,7 @@ describe('Nodehun#add(word)', () => {
             .then(() => { })
             .catch(() => { })
             .finally(() => { success = true })
-            
+
         strictEqual(success, true)
     })
 
@@ -536,7 +531,7 @@ describe('Nodehun#add(word)', () => {
 })
 
 describe('Nodehun#addSync(value)', () => {
-    let nodehun: Nodehun
+    let nodehun
 
     beforeEach(() => {
         // clear changes before each test
@@ -592,13 +587,13 @@ describe('Nodehun#addSync(value)', () => {
 })
 
 describe('Nodehun#remove(word)', () => {
-    let nodehun: Nodehun
+    let nodehun
 
     beforeEach(() => {
         // clear changes before each test
         nodehun = new Nodehun(enUS.affix, enUS.dictionary)
     })
-        
+
     it(`should be a function`, async () => {
         strictEqual(typeof nodehun.remove, 'function')
     })
@@ -610,7 +605,7 @@ describe('Nodehun#remove(word)', () => {
             .then(() => { })
             .catch(() => { })
             .finally(() => { success = true })
-            
+
         strictEqual(success, true)
     })
 
@@ -661,7 +656,7 @@ describe('Nodehun#remove(word)', () => {
 })
 
 describe('Nodehun#removeSync(value)', () => {
-    let nodehun: Nodehun
+    let nodehun
 
     beforeEach(() => {
         // clear changes before each test
@@ -737,7 +732,7 @@ describe('Nodehun#removeSync(value)', () => {
   // });
 
 describe('Nodehun#analyze(word: string): Promise<string[]>;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.analyze, 'function')
@@ -779,7 +774,7 @@ describe('Nodehun#analyze(word: string): Promise<string[]>;', () => {
             // success
         }
     })
-    
+
     it(`should return morphological analysis`, async () => {
         const morphologicalAnalysis = await nodehun.analyze('telling')
         deepEqual(
@@ -797,7 +792,7 @@ describe('Nodehun#analyze(word: string): Promise<string[]>;', () => {
 })
 
 describe('Nodehun#analyzeSync(word: string): string[];', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.analyzeSync, 'function')
@@ -829,7 +824,7 @@ describe('Nodehun#analyzeSync(word: string): string[];', () => {
             // success
         }
     })
-    
+
     it(`should return morphological analysis`, async () => {
         const morphologicalAnalysis = nodehun.analyzeSync('telling')
         deepEqual(
@@ -847,7 +842,7 @@ describe('Nodehun#analyzeSync(word: string): string[];', () => {
 })
 
 describe('Nodehun#stem(word: string): Promise<string[]>;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.stem, 'function')
@@ -889,7 +884,7 @@ describe('Nodehun#stem(word: string): Promise<string[]>;', () => {
             // success
         }
     })
-    
+
     it(`should return roots`, async () => {
         const roots = await nodehun.stem('telling')
         deepEqual(
@@ -907,7 +902,7 @@ describe('Nodehun#stem(word: string): Promise<string[]>;', () => {
 })
 
 describe('Nodehun#stemSync(word: string): string[];', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.stemSync, 'function')
@@ -939,7 +934,7 @@ describe('Nodehun#stemSync(word: string): string[];', () => {
             // success
         }
     })
-    
+
     it(`should return roots`, async () => {
         const roots = nodehun.stemSync('telling')
         deepEqual(
@@ -957,7 +952,7 @@ describe('Nodehun#stemSync(word: string): string[];', () => {
 })
 
 describe('Nodehun#generate(word: string, example: string): Promise<string[]>;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.generate, 'function')
@@ -1009,7 +1004,7 @@ describe('Nodehun#generate(word: string, example: string): Promise<string[]>;', 
         }
     })
 
-    
+
     it(`should return variations based on example`, async () => {
         deepEqual(
             await nodehun.generate('telling', 'ran'),
@@ -1047,7 +1042,7 @@ describe('Nodehun#generate(word: string, example: string): Promise<string[]>;', 
 })
 
 describe('Nodehun#generateSync(word: string): string[];', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.generateSync, 'function')
@@ -1089,7 +1084,7 @@ describe('Nodehun#generateSync(word: string): string[];', () => {
         }
     })
 
-    
+
     it(`should return variations based on example`, async () => {
         deepEqual(
             nodehun.generateSync('telling', 'ran'),
@@ -1127,7 +1122,7 @@ describe('Nodehun#generateSync(word: string): string[];', () => {
 })
 
 describe('Nodehun#addDictionary(dictionary: Buffer): Promise<void>;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.addDictionary, 'function')
@@ -1169,7 +1164,7 @@ describe('Nodehun#addDictionary(dictionary: Buffer): Promise<void>;', () => {
             // success
         }
     })
-    
+
     it(`should mark correct after dictionary is added`, async () => {
         await nodehun.addDictionary(fr.dictionary)
         strictEqual(await nodehun.spell('bonjour'), true)
@@ -1177,7 +1172,7 @@ describe('Nodehun#addDictionary(dictionary: Buffer): Promise<void>;', () => {
 })
 
 describe('Nodehun#addDictionarySync(dictionary: Buffer): void;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.addDictionarySync, 'function')
@@ -1209,7 +1204,7 @@ describe('Nodehun#addDictionarySync(dictionary: Buffer): void;', () => {
             // success
         }
     })
-    
+
     it(`should mark correct after dictionary is added`, async () => {
         nodehun.addDictionarySync(fr.dictionary)
         strictEqual(nodehun.spellSync('bonjour'), true)
@@ -1217,8 +1212,8 @@ describe('Nodehun#addDictionarySync(dictionary: Buffer): void;', () => {
 })
 
 describe('Nodehun#addWithAffix(word: string, example: string): Promise<void>;', () => {
-    let nodehun: Nodehun
-    
+    let nodehun
+
     beforeEach(() => {
         // clear changes before every test
         nodehun = new Nodehun(enUS.affix, enUS.dictionary)
@@ -1281,7 +1276,7 @@ describe('Nodehun#addWithAffix(word: string, example: string): Promise<void>;', 
 })
 
 describe('Nodehun#addWithAffixSync(word: string, example: string): void;', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary)
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
         strictEqual(typeof nodehun.addWithAffixSync, 'function')
@@ -1330,8 +1325,8 @@ describe('Nodehun#addWithAffixSync(word: string, example: string): void;', () =>
 })
 
 describe('Nodehun#getWordCharacters()', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
-    const nodehunGB: Nodehun = new Nodehun(enGB.affix, enGB.dictionary);
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    const nodehunGB = new Nodehun(enGB.affix, enGB.dictionary);
 
     it(`should return the defined word-characters`, () => {
         strictEqual(nodehun.getWordCharacters(), `0123456789'.-’`)
@@ -1343,20 +1338,20 @@ describe('Nodehun#getWordCharacters()', () => {
 });
 
 describe('Nodehun#getWordCharactersUTF16()', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
-    const nodehunGB: Nodehun = new Nodehun(enGB.affix, enGB.dictionary);
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    const nodehunGB = new Nodehun(enGB.affix, enGB.dictionary);
 
     it(`should return the defined word-characters`, () => {
         strictEqual(nodehun.getWordCharactersUTF16(), `'-.0123456789’`)
     })
-  
+
     it(`should return 'undefined' when not defined`, () => {
         strictEqual(nodehunGB.getWordCharactersUTF16(), undefined)
     })
 });
 
 describe('Nodehun#getDictionaryEncoding()', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary);
 
     it(`should return encoding as a string when known`, () => {
         strictEqual(nodehun.getDictionaryEncoding(), 'UTF-8')
@@ -1364,7 +1359,7 @@ describe('Nodehun#getDictionaryEncoding()', () => {
 })
 
 describe('Nodehun#getVersion()', () => {
-    const nodehun: Nodehun = new Nodehun(enUS.affix, enUS.dictionary);
+    const nodehun = new Nodehun(enUS.affix, enUS.dictionary);
 
     it(`should return 'undefined' when not defined`, () => {
         strictEqual(nodehun.getVersion(), undefined)

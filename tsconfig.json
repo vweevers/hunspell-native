@@ -3,8 +3,7 @@
     "target": "ES6",
     "types": [
       "./src/Nodehun",
-      "node",
-      "mocha"
+      "node"
     ]
   }
 }

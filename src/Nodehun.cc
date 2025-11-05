@@ -55,8 +55,19 @@ Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
   return func;
 }
 
-Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(info) {
+Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(info), context(nullptr) {
   Napi::Env env = info.Env();
+
+  if (info.Length() != 2) {
+    Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS).ThrowAsJavaScriptException();;
+    return;
+  } else if (!info[0].IsString()) {
+    Napi::Error::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
+    return;
+  } else if (!info[1].IsString()) {
+    Napi::Error::New(env, INVALID_SECOND_ARGUMENT).ThrowAsJavaScriptException();
+    return;
+  }
 
   std::string affix = info[0].ToString().Utf8Value();
   std::string dictionary = info[1].ToString().Utf8Value();
@@ -78,7 +89,7 @@ Napi::Value Nodehun::addDictionarySync(const Napi::CallbackInfo& info) {
     Napi::Error error = Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS);
     error.ThrowAsJavaScriptException();
     return error.Value();
-    } else if (!info[0].IsString()) {
+  } else if (!info[0].IsString()) {
     Napi::Error error = Napi::Error::New(env, INVALID_FIRST_ARGUMENT);
     error.ThrowAsJavaScriptException();
     return error.Value();
@@ -624,7 +635,7 @@ Napi::Value Nodehun::getWordCharactersUTF16(const Napi::CallbackInfo& info) {
   if (chars == NULL) {
     return env.Undefined();
   } else {
-    return Napi::String::New(env, ((char16_t*) chars));
+    return Napi::String::New(env, ((char16_t*) chars), vec_wordchars.size());
   }
 }
 
