@@ -1,6 +1,8 @@
 #ifndef Nodehun_H
 #define Nodehun_H
 
+#define NAPI_VERSION 8
+
 #include <napi.h>
 #include "HunspellContext.h"
 
