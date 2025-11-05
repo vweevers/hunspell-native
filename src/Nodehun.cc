@@ -24,8 +24,6 @@ const std::string INVALID_CONSTRUCTOR_CALL = "Use the new operator to create an 
 Napi::FunctionReference Nodehun::constructor;
 
 Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
-  Napi::HandleScope scope(env);
-
   Napi::Function func = DefineClass(env, "Nodehun", {
     InstanceMethod("addDictionary", &Nodehun::addDictionary),
     InstanceMethod("addDictionarySync", &Nodehun::addDictionarySync),
@@ -54,13 +52,11 @@ Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
   constructor = Napi::Persistent(func);
   constructor.SuppressDestruct();
 
-  exports.Set("Nodehun", func);
-  return exports;
+  return func;
 }
 
 Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(info) {
   Napi::Env env = info.Env();
-  Napi::HandleScope scope(env);
 
   std::string affix = info[0].ToString().Utf8Value();
   std::string dictionary = info[1].ToString().Utf8Value();
@@ -72,29 +68,6 @@ Nodehun::~Nodehun() {
   if (context) {
     delete context;
     context = NULL;
-  }
-}
-
-Napi::Object Nodehun::NewInstance(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-  Napi::EscapableHandleScope scope(env);
-
-  if (info.Length() != 2) {
-    Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS).ThrowAsJavaScriptException();
-    } else if (!info[0].IsString()) {
-    Napi::Error::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
-    } else if (!info[1].IsString()) {
-    Napi::Error::New(env, INVALID_SECOND_ARGUMENT).ThrowAsJavaScriptException();
-  } else if (!info.IsConstructCall()) {
-    Napi::Error::New(env, INVALID_CONSTRUCTOR_CALL).ThrowAsJavaScriptException();
-  }
-
-  if (env.IsExceptionPending()) {
-    return Napi::Object::New(env);
-  } else {
-    Napi::Object obj = constructor.New({info[0], info[1]});
-
-    return scope.Escape(napi_value(obj)).ToObject();
   }
 }
 
@@ -172,7 +145,6 @@ Napi::Value Nodehun::spell(const Napi::CallbackInfo& info) {
 
 Napi::Value Nodehun::spellSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
-  Napi::HandleScope scope(env);
 
   if (info.Length() != 1) {
     Napi::Error error = Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS);
