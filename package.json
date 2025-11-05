@@ -33,13 +33,10 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.12.6",
     "mocha": "^6.2.2",
-    "nodemon": "^1.19.4",
     "ts-node": "^8.4.1",
     "typescript": "^3.7.2"
   },
   "scripts": {
-    "start": "nodemon -e ts,js,cc,h,gyp -x \"npm run build && npm run test\"",
-    "start-test": "nodemon -e ts,js -x \"npm run test\"",
     "build": "node-gyp rebuild -j 8",
     "build-debug": "node-gyp rebuild -j 8 --debug",
     "test": "ts-node --transpile-only node_modules/mocha/bin/mocha ./test/*.spec.ts"

@@ -282,17 +282,9 @@ The build applies a [patch](./patches/001-static-cast.patch) to the hunspell sub
 The following is a a list of commands and their descriptions which may
 help in development.
 
-`npm start`: to jumpstart the development server. This will automatically recompile the
-c++ source when changes are made and run the tests once more.
+`npm run build`: to compile the addon.
 
-`npm run start-test`: if you don't want to continuously compile the c++ source, but do want
-the tests to re-run when changes are made to the test files.
-
-`npm run build`: to compile the addon once.
-
-`npm test`: to run the tests once.
-
-`npm run performance-test`: to run the performance tests and output updated graphs. (see `test/performance`)
+`npm test`: to run the tests.
 
 ## <a id="development-notes"></a>Notes
 
