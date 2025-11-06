@@ -31,5 +31,4 @@ export class Hunspell {
 
   getWordCharacters (): string | undefined
   getWordCharactersUTF16 (): string | undefined
-  getVersion (): string | undefined
 }

@@ -1346,11 +1346,3 @@ describe('Hunspell#getWordCharactersUTF16()', () => {
     strictEqual(hunspellGB.getWordCharactersUTF16(), undefined)
   })
 })
-
-describe('Hunspell#getVersion()', () => {
-  const hunspell = new Hunspell(enUS.affix, enUS.dictionary)
-
-  it('should return \'undefined\' when not defined', () => {
-    strictEqual(hunspell.getVersion(), undefined)
-  })
-})

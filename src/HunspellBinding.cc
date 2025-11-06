@@ -42,7 +42,6 @@ Napi::Object HunspellBinding::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("removeSync", &HunspellBinding::removeSync),
     InstanceMethod("getWordCharacters", &HunspellBinding::getWordCharacters),
     InstanceMethod("getWordCharactersUTF16", &HunspellBinding::getWordCharactersUTF16),
-    InstanceMethod("getVersion", &HunspellBinding::getVersion)
   });
 
   // Support worker threads
@@ -643,23 +642,5 @@ Napi::Value HunspellBinding::getWordCharactersUTF16(const Napi::CallbackInfo& in
     return env.Undefined();
   } else {
     return Napi::String::New(env, ((char16_t*) chars), vec_wordchars.size());
-  }
-}
-
-Napi::Value HunspellBinding::getVersion(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-
-  if (info.Length() > 0) {
-    Napi::Error error = Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS);
-    error.ThrowAsJavaScriptException();
-    return error.Value();
-  }
-
-  const std::string v = this->context->instance->get_version_cpp();
-
-  if (v.empty()) {
-    return env.Undefined();
-  } else {
-    return Napi::String::New(env, v);
   }
 }
