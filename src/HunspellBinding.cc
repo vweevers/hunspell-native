@@ -40,8 +40,7 @@ Napi::Object HunspellBinding::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("addWithAffixSync", &HunspellBinding::addWithAffixSync),
     InstanceMethod("remove", &HunspellBinding::remove),
     InstanceMethod("removeSync", &HunspellBinding::removeSync),
-    InstanceMethod("getWordCharacters", &HunspellBinding::getWordCharacters),
-    InstanceMethod("getWordCharactersUTF16", &HunspellBinding::getWordCharactersUTF16),
+    InstanceMethod("getWordCharacters", &HunspellBinding::getWordCharacters)
   });
 
   // Support worker threads
@@ -623,24 +622,5 @@ Napi::Value HunspellBinding::getWordCharacters(const Napi::CallbackInfo& info) {
     return env.Undefined();
   } else {
     return Napi::String::New(env, wordCharacters);
-  }
-}
-
-Napi::Value HunspellBinding::getWordCharactersUTF16(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-
-  if (info.Length() > 0) {
-    Napi::Error error = Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS);
-    error.ThrowAsJavaScriptException();
-    return error.Value();
-  }
-
-  std::vector<w_char> vec_wordchars = this->context->instance->get_wordchars_utf16();
-  const w_char* chars = vec_wordchars.data();
-
-  if (chars == NULL) {
-    return env.Undefined();
-  } else {
-    return Napi::String::New(env, ((char16_t*) chars), vec_wordchars.size());
   }
 }

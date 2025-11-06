@@ -53,8 +53,6 @@ private:
 
   // () => string | undefined
   Napi::Value getWordCharacters(const Napi::CallbackInfo& info);
-  // () => string | undefined
-  Napi::Value getWordCharactersUTF16(const Napi::CallbackInfo& info);
 };
 
 #endif

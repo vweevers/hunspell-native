@@ -1333,16 +1333,3 @@ describe('Hunspell#getWordCharacters()', () => {
     strictEqual(hunspellGB.getWordCharacters(), undefined)
   })
 })
-
-describe('Hunspell#getWordCharactersUTF16()', () => {
-  const hunspell = new Hunspell(enUS.affix, enUS.dictionary)
-  const hunspellGB = new Hunspell(enGB.affix, enGB.dictionary)
-
-  it('should return the defined word-characters', () => {
-    strictEqual(hunspell.getWordCharactersUTF16(), '\'-.0123456789’')
-  })
-
-  it('should return \'undefined\' when not defined', () => {
-    strictEqual(hunspellGB.getWordCharactersUTF16(), undefined)
-  })
-})

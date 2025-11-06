@@ -30,5 +30,4 @@ export class Hunspell {
   removeSync (word: string): void
 
   getWordCharacters (): string | undefined
-  getWordCharactersUTF16 (): string | undefined
 }
