@@ -1,6 +1,6 @@
 {
   "targets": [{
-    "target_name": "Nodehun",
+    "target_name": "HunspellBinding",
     "sources": [ "src/index.cc" ],
     "include_dirs": [
       "<!@(node -p \"require('node-addon-api').include\")"

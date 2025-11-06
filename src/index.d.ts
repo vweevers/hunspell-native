@@ -1,4 +1,4 @@
-export class Nodehun {
+export class Hunspell {
   constructor(affix: string, dictionary: string);
 
   spell(word: string): Promise<boolean>;

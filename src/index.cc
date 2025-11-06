@@ -1,8 +1,8 @@
 #include <napi.h>
-#include "Nodehun.cc"
+#include "HunspellBinding.cc"
 
 Napi::Object InitAll(Napi::Env env, Napi::Object exports) {
-  return Nodehun::Init(env, exports);
+  return HunspellBinding::Init(env, exports);
 }
 
 NODE_API_MODULE(addon, InitAll)

@@ -1,4 +1,4 @@
-#include "Nodehun.h"
+#include "HunspellBinding.h"
 #include <napi.h>
 #include <hunspell.hxx>
 #include "Async/AddDictionaryWorker.cc"
@@ -20,30 +20,30 @@ const std::string INVALID_SECOND_ARGUMENT = "Second argument is invalid.";
 // #include <fstream>
 // std::ofstream logFile("log.txt");
 
-Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
-  Napi::Function func = DefineClass(env, "Nodehun", {
-    InstanceMethod("addDictionary", &Nodehun::addDictionary),
-    InstanceMethod("addDictionarySync", &Nodehun::addDictionarySync),
-    InstanceMethod("spell", &Nodehun::spell),
-    InstanceMethod("spellSync", &Nodehun::spellSync),
-    InstanceMethod("suggest", &Nodehun::suggest),
-    InstanceMethod("suggestSync", &Nodehun::suggestSync),
-    InstanceMethod("analyze", &Nodehun::analyze),
-    InstanceMethod("analyzeSync", &Nodehun::analyzeSync),
-    InstanceMethod("stem", &Nodehun::stem),
-    InstanceMethod("stemSync", &Nodehun::stemSync),
-    InstanceMethod("generate", &Nodehun::generate),
-    InstanceMethod("generateSync", &Nodehun::generateSync),
-    InstanceMethod("add", &Nodehun::add),
-    InstanceMethod("addSync", &Nodehun::addSync),
-    InstanceMethod("addWithAffix", &Nodehun::addWithAffix),
-    InstanceMethod("addWithAffixSync", &Nodehun::addWithAffixSync),
-    InstanceMethod("remove", &Nodehun::remove),
-    InstanceMethod("removeSync", &Nodehun::removeSync),
-    InstanceMethod("getDictionaryEncoding", &Nodehun::getDictionaryEncoding),
-    InstanceMethod("getWordCharacters", &Nodehun::getWordCharacters),
-    InstanceMethod("getWordCharactersUTF16", &Nodehun::getWordCharactersUTF16),
-    InstanceMethod("getVersion", &Nodehun::getVersion)
+Napi::Object HunspellBinding::Init(Napi::Env env, Napi::Object exports) {
+  Napi::Function func = DefineClass(env, "Hunspell", {
+    InstanceMethod("addDictionary", &HunspellBinding::addDictionary),
+    InstanceMethod("addDictionarySync", &HunspellBinding::addDictionarySync),
+    InstanceMethod("spell", &HunspellBinding::spell),
+    InstanceMethod("spellSync", &HunspellBinding::spellSync),
+    InstanceMethod("suggest", &HunspellBinding::suggest),
+    InstanceMethod("suggestSync", &HunspellBinding::suggestSync),
+    InstanceMethod("analyze", &HunspellBinding::analyze),
+    InstanceMethod("analyzeSync", &HunspellBinding::analyzeSync),
+    InstanceMethod("stem", &HunspellBinding::stem),
+    InstanceMethod("stemSync", &HunspellBinding::stemSync),
+    InstanceMethod("generate", &HunspellBinding::generate),
+    InstanceMethod("generateSync", &HunspellBinding::generateSync),
+    InstanceMethod("add", &HunspellBinding::add),
+    InstanceMethod("addSync", &HunspellBinding::addSync),
+    InstanceMethod("addWithAffix", &HunspellBinding::addWithAffix),
+    InstanceMethod("addWithAffixSync", &HunspellBinding::addWithAffixSync),
+    InstanceMethod("remove", &HunspellBinding::remove),
+    InstanceMethod("removeSync", &HunspellBinding::removeSync),
+    InstanceMethod("getDictionaryEncoding", &HunspellBinding::getDictionaryEncoding),
+    InstanceMethod("getWordCharacters", &HunspellBinding::getWordCharacters),
+    InstanceMethod("getWordCharactersUTF16", &HunspellBinding::getWordCharactersUTF16),
+    InstanceMethod("getVersion", &HunspellBinding::getVersion)
   });
 
   // Support worker threads
@@ -55,7 +55,7 @@ Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
   return func;
 }
 
-Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(info), context(nullptr) {
+HunspellBinding::HunspellBinding(const Napi::CallbackInfo& info) : Napi::ObjectWrap<HunspellBinding>(info), context(nullptr) {
   Napi::Env env = info.Env();
 
   std::string affixFile;
@@ -102,14 +102,14 @@ Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(inf
   );
 };
 
-Nodehun::~Nodehun() {
+HunspellBinding::~HunspellBinding() {
   if (context) {
     delete context;
     context = NULL;
   }
 }
 
-Napi::Value Nodehun::addDictionarySync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::addDictionarySync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -129,7 +129,7 @@ Napi::Value Nodehun::addDictionarySync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::addDictionary(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::addDictionary(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(info.Env());
@@ -155,7 +155,7 @@ Napi::Value Nodehun::addDictionary(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::spell(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::spell(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
@@ -181,7 +181,7 @@ Napi::Value Nodehun::spell(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::spellSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::spellSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -203,7 +203,7 @@ Napi::Value Nodehun::spellSync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::suggest(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::suggest(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
@@ -229,7 +229,7 @@ Napi::Value Nodehun::suggest(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::suggestSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::suggestSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -264,7 +264,7 @@ Napi::Value Nodehun::suggestSync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::analyze(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::analyze(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
@@ -290,7 +290,7 @@ Napi::Value Nodehun::analyze(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::analyzeSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::analyzeSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -320,7 +320,7 @@ Napi::Value Nodehun::analyzeSync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::stem(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::stem(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
@@ -346,7 +346,7 @@ Napi::Value Nodehun::stem(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::stemSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::stemSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -376,7 +376,7 @@ Napi::Value Nodehun::stemSync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::generate(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::generate(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(env);
@@ -407,7 +407,7 @@ Napi::Value Nodehun::generate(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::generateSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::generateSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 2) {
@@ -446,7 +446,7 @@ Napi::Value Nodehun::generateSync(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::addSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::addSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -471,7 +471,7 @@ Napi::Value Nodehun::addSync(const Napi::CallbackInfo& info) {
 
 }
 
-Napi::Value Nodehun::add(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::add(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(info.Env());
@@ -497,7 +497,7 @@ Napi::Value Nodehun::add(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::addWithAffixSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::addWithAffixSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 2) {
@@ -528,7 +528,7 @@ Napi::Value Nodehun::addWithAffixSync(const Napi::CallbackInfo& info) {
 
 }
 
-Napi::Value Nodehun::addWithAffix(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::addWithAffix(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(info.Env());
@@ -559,7 +559,7 @@ Napi::Value Nodehun::addWithAffix(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::removeSync(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::removeSync(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() != 1) {
@@ -584,7 +584,7 @@ Napi::Value Nodehun::removeSync(const Napi::CallbackInfo& info) {
 
 }
 
-Napi::Value Nodehun::remove(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::remove(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   Napi::Promise::Deferred deferred = Napi::Promise::Deferred::New(info.Env());
@@ -610,7 +610,7 @@ Napi::Value Nodehun::remove(const Napi::CallbackInfo& info) {
   return deferred.Promise();
 }
 
-Napi::Value Nodehun::getDictionaryEncoding(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::getDictionaryEncoding(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() > 0) {
@@ -629,7 +629,7 @@ Napi::Value Nodehun::getDictionaryEncoding(const Napi::CallbackInfo& info) {
 
 }
 
-Napi::Value Nodehun::getWordCharacters(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::getWordCharacters(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() > 0) {
@@ -647,7 +647,7 @@ Napi::Value Nodehun::getWordCharacters(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::getWordCharactersUTF16(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::getWordCharactersUTF16(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() > 0) {
@@ -666,7 +666,7 @@ Napi::Value Nodehun::getWordCharactersUTF16(const Napi::CallbackInfo& info) {
   }
 }
 
-Napi::Value Nodehun::getVersion(const Napi::CallbackInfo& info) {
+Napi::Value HunspellBinding::getVersion(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
 
   if (info.Length() > 0) {

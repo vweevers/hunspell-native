@@ -1,16 +1,16 @@
-#ifndef Nodehun_H
-#define Nodehun_H
+#ifndef HunspellBinding_H
+#define HunspellBinding_H
 
 #define NAPI_VERSION 8
 
 #include <napi.h>
 #include "HunspellContext.h"
 
-class Nodehun : public Napi::ObjectWrap<Nodehun> {
+class HunspellBinding : public Napi::ObjectWrap<HunspellBinding> {
 public:
   static Napi::Object Init(Napi::Env env, Napi::Object exports);
-  Nodehun(const Napi::CallbackInfo& info);
-  ~Nodehun();
+  HunspellBinding(const Napi::CallbackInfo& info);
+  ~HunspellBinding();
 
 private:
   HunspellContext* context;
