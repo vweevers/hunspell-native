@@ -7,13 +7,12 @@
 #include "HunspellContext.h"
 
 class Nodehun : public Napi::ObjectWrap<Nodehun> {
- public:
+public:
   static Napi::Object Init(Napi::Env env, Napi::Object exports);
   Nodehun(const Napi::CallbackInfo& info);
   ~Nodehun();
 
- private:
-  static Napi::FunctionReference constructor;
+private:
   HunspellContext* context;
 
   // (dictionary: string) => void

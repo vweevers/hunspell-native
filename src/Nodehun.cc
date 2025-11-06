@@ -20,8 +20,6 @@ const std::string INVALID_SECOND_ARGUMENT = "Second argument is invalid.";
 // #include <fstream>
 // std::ofstream logFile("log.txt");
 
-Napi::FunctionReference Nodehun::constructor;
-
 Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
   Napi::Function func = DefineClass(env, "Nodehun", {
     InstanceMethod("addDictionary", &Nodehun::addDictionary),
@@ -48,8 +46,11 @@ Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("getVersion", &Nodehun::getVersion)
   });
 
-  constructor = Napi::Persistent(func);
-  constructor.SuppressDestruct();
+  // Support worker threads
+  // See https://github.com/nodejs/node-addon-api/blob/main/doc/object_wrap.md
+  auto* constructor = new Napi::FunctionReference();
+  *constructor = Napi::Persistent(func);
+  env.SetInstanceData<Napi::FunctionReference>(constructor);
 
   return func;
 }
