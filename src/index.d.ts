@@ -1,4 +1,5 @@
 export class Hunspell {
+  constructor (dictionary: { aff: string, dic: string })
   constructor (affix: string, dictionary: string)
 
   spell (word: string): Promise<boolean>
