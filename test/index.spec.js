@@ -19,7 +19,7 @@ const nl = {
     dictionary: path.join(__dirname, './dictionaries/nl.dic')
 }
 
-describe('Nodehun(affixBuffer, dictionaryBuffer)', () => {
+describe('Nodehun(..)', () => {
     it(`should export a function`, () => {
         strictEqual(typeof Nodehun, 'function')
     })
@@ -40,16 +40,20 @@ describe('Nodehun(affixBuffer, dictionaryBuffer)', () => {
         throws(() => new Nodehun(1, 2, 3))
     })
 
-    it(`should throw when the first argument isn't a buffer`, () => {
+    it(`should throw when the first argument is invalid`, () => {
         throws(() => new Nodehun(1, 2))
     })
 
-    it(`should throw when the second argument isn't a buffer`, () => {
+    it(`should throw when the second argument is invalid`, () => {
         throws(() => new Nodehun(enUS.affix, 2))
     })
 
-    it(`should successfully construct an object when two buffers are given`, () => {
+    it(`should successfully construct an object when two strings are given`, () => {
         new Nodehun(enUS.affix, enUS.dictionary)
+    })
+
+    it(`should successfully construct an object when a dictionary is given`, () => {
+        new Nodehun({ aff: enUS.affix, dic: enUS.dictionary })
     })
 
     it(`should construct an object of type Nodehun`, () => {
@@ -1121,7 +1125,7 @@ describe('Nodehun#generateSync(word: string): string[];', () => {
     })
 })
 
-describe('Nodehun#addDictionary(dictionary: Buffer): Promise<void>;', () => {
+describe('Nodehun#addDictionary(dictionary: string): Promise<void>;', () => {
     const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {
@@ -1171,7 +1175,7 @@ describe('Nodehun#addDictionary(dictionary: Buffer): Promise<void>;', () => {
     })
 })
 
-describe('Nodehun#addDictionarySync(dictionary: Buffer): void;', () => {
+describe('Nodehun#addDictionarySync(dictionary: string): void;', () => {
     const nodehun = new Nodehun(enUS.affix, enUS.dictionary)
 
     it(`should be a function`, () => {

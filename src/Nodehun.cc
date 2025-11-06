@@ -12,9 +12,8 @@
 #include "Async/RemoveWorker.cc"
 
 const std::string INVALID_NUMBER_OF_ARGUMENTS = "Invalid number of arguments.";
-const std::string INVALID_FIRST_ARGUMENT = "First argument is invalid (incorrect type).";
-const std::string INVALID_SECOND_ARGUMENT = "Second argument is invalid (incorrect type).";
-const std::string INVALID_CONSTRUCTOR_CALL = "Use the new operator to create an instance of this object.";
+const std::string INVALID_FIRST_ARGUMENT = "First argument is invalid.";
+const std::string INVALID_SECOND_ARGUMENT = "Second argument is invalid.";
 
 // LOGGING
 // #include <iostream>
@@ -58,21 +57,48 @@ Napi::Object Nodehun::Init(Napi::Env env, Napi::Object exports) {
 Nodehun::Nodehun(const Napi::CallbackInfo& info) : Napi::ObjectWrap<Nodehun>(info), context(nullptr) {
   Napi::Env env = info.Env();
 
-  if (info.Length() != 2) {
-    Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS).ThrowAsJavaScriptException();;
-    return;
-  } else if (!info[0].IsString()) {
-    Napi::Error::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
-    return;
-  } else if (!info[1].IsString()) {
-    Napi::Error::New(env, INVALID_SECOND_ARGUMENT).ThrowAsJavaScriptException();
+  std::string affixFile;
+  std::string dictionaryFile;
+
+  if (info.Length() == 1 && info[0].IsObject()) {
+    Napi::Object dictionary = info[0].As<Napi::Object>();
+
+    if (!dictionary.Has("aff") || !dictionary.Has("dic")) {
+      Napi::TypeError::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
+      return;
+    }
+
+    Napi::Value aff = dictionary.Get("aff");
+    Napi::Value dic = dictionary.Get("dic");
+
+    if (!aff.IsString() || !dic.IsString()) {
+      Napi::TypeError::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
+      return;
+    }
+
+    affixFile = aff.As<Napi::String>().Utf8Value();
+    dictionaryFile = dic.As<Napi::String>().Utf8Value();
+  } else if (info.Length() == 2) {
+    if (!info[0].IsString()) {
+      Napi::TypeError::New(env, INVALID_FIRST_ARGUMENT).ThrowAsJavaScriptException();
+      return;
+    }
+
+    if (!info[1].IsString()) {
+      Napi::TypeError::New(env, INVALID_SECOND_ARGUMENT).ThrowAsJavaScriptException();
+      return;
+    }
+
+    affixFile = info[0].ToString().Utf8Value();
+    dictionaryFile = info[1].ToString().Utf8Value();
+  } else {
+    Napi::TypeError::New(env, INVALID_NUMBER_OF_ARGUMENTS).ThrowAsJavaScriptException();;
     return;
   }
 
-  std::string affix = info[0].ToString().Utf8Value();
-  std::string dictionary = info[1].ToString().Utf8Value();
-
-  context = new HunspellContext(new Hunspell(affix.c_str(), dictionary.c_str(), NULL));
+  context = new HunspellContext(
+    new Hunspell(affixFile.c_str(), dictionaryFile.c_str(), NULL)
+  );
 };
 
 Nodehun::~Nodehun() {
