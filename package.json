@@ -39,7 +39,7 @@
   "scripts": {
     "build": "node-gyp rebuild -j 8",
     "build-debug": "node-gyp rebuild -j 8 --debug",
-    "test": "eslint && node test/index.spec.js",
-    "test-watch": "node --test --watch test/index.spec.js"
+    "test": "eslint && node test/index.js",
+    "test-watch": "node --test --watch test/index.js"
   }
 }
