@@ -40,7 +40,6 @@ Napi::Object HunspellBinding::Init(Napi::Env env, Napi::Object exports) {
     InstanceMethod("addWithAffixSync", &HunspellBinding::addWithAffixSync),
     InstanceMethod("remove", &HunspellBinding::remove),
     InstanceMethod("removeSync", &HunspellBinding::removeSync),
-    InstanceMethod("getDictionaryEncoding", &HunspellBinding::getDictionaryEncoding),
     InstanceMethod("getWordCharacters", &HunspellBinding::getWordCharacters),
     InstanceMethod("getWordCharactersUTF16", &HunspellBinding::getWordCharactersUTF16),
     InstanceMethod("getVersion", &HunspellBinding::getVersion)
@@ -608,25 +607,6 @@ Napi::Value HunspellBinding::remove(const Napi::CallbackInfo& info) {
   }
 
   return deferred.Promise();
-}
-
-Napi::Value HunspellBinding::getDictionaryEncoding(const Napi::CallbackInfo& info) {
-  Napi::Env env = info.Env();
-
-  if (info.Length() > 0) {
-    Napi::Error error = Napi::Error::New(env, INVALID_NUMBER_OF_ARGUMENTS);
-    error.ThrowAsJavaScriptException();
-    return error.Value();
-  }
-
-  char* encoding = this->context->instance->get_dic_encoding();
-
-  if (encoding == NULL) {
-    return env.Undefined();
-  } else {
-    return Napi::String::New(env, encoding);
-  }
-
 }
 
 Napi::Value HunspellBinding::getWordCharacters(const Napi::CallbackInfo& info) {

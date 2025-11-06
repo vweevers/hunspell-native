@@ -29,7 +29,6 @@ export class Hunspell {
   remove (word: string): Promise<void>
   removeSync (word: string): void
 
-  getDictionaryEncoding (): string | undefined
   getWordCharacters (): string | undefined
   getWordCharactersUTF16 (): string | undefined
   getVersion (): string | undefined

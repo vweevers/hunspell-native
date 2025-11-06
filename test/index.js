@@ -1347,14 +1347,6 @@ describe('Hunspell#getWordCharactersUTF16()', () => {
   })
 })
 
-describe('Hunspell#getDictionaryEncoding()', () => {
-  const hunspell = new Hunspell(enUS.affix, enUS.dictionary)
-
-  it('should return encoding as a string when known', () => {
-    strictEqual(hunspell.getDictionaryEncoding(), 'UTF-8')
-  })
-})
-
 describe('Hunspell#getVersion()', () => {
   const hunspell = new Hunspell(enUS.affix, enUS.dictionary)
 
