@@ -1,9 +1,9 @@
-const { execFileSync } = require('child_process')
-const { writeFileSync } = require('fs')
-const path = require('path')
+import { execFileSync } from 'node:child_process'
+import { writeFileSync } from 'node:fs'
+import path from 'node:path'
 
 // Note that the cwd is the build directory
-const project = path.dirname(__dirname)
+const project = path.dirname(import.meta.dirname)
 const stampFile = process.argv[2]
 
 execFileSync('git', ['checkout', 'src/hunspell/affixmgr.cxx'], {

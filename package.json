@@ -4,7 +4,7 @@
   "description": "Cross-platform Node.js binding for Hunspell, the spellcheck library used by LibreOffice, Firefox, Chrome and Adobe.",
   "author": "Vincent Weevers",
   "license": "MIT",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "types": "src/index.d.ts",
   "dependencies": {

@@ -1,22 +1,23 @@
-const { fail, strictEqual, throws, deepEqual, notEqual } = require('node:assert')
-const { describe, it, beforeEach } = require('node:test')
-const path = require('node:path')
-const { Hunspell } = require('../')
+import { fail, strictEqual, throws, deepEqual, notEqual } from 'node:assert'
+import { describe, it, beforeEach } from 'node:test'
+import { Hunspell } from '../index.js'
 
+// TODO: consider replacing with https://www.npmjs.com/package/language-packages
+// although they seem to lack data to enable word analysis / generation.
 const enUS = {
-  affix: path.join(__dirname, './dictionaries/en_us.aff'),
-  dictionary: path.join(__dirname, './dictionaries/en_us.dic')
+  affix: 'test/dictionaries/en_us.aff',
+  dictionary: 'test/dictionaries/en_us.dic'
 }
 const enGB = {
-  affix: path.join(__dirname, './dictionaries/en_gb.aff'),
-  dictionary: path.join(__dirname, './dictionaries/en_gb.dic')
+  affix: 'test/dictionaries/en_gb.aff',
+  dictionary: 'test/dictionaries/en_gb.dic'
 }
 const fr = {
-  dictionary: path.join(__dirname, './dictionaries/fr.dic')
+  dictionary: 'test/dictionaries/fr.dic'
 }
 const nl = {
-  affix: path.join(__dirname, './dictionaries/nl.aff'),
-  dictionary: path.join(__dirname, './dictionaries/nl.dic')
+  affix: 'test/dictionaries/nl.aff',
+  dictionary: 'test/dictionaries/nl.dic'
 }
 
 describe('Hunspell(..)', () => {

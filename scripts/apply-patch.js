@@ -1,9 +1,9 @@
-const { execFileSync } = require('child_process')
-const { writeFileSync } = require('fs')
-const path = require('path')
+import { execFileSync } from 'node:child_process'
+import { writeFileSync } from 'node:fs'
+import path from 'node:path'
 
 // Note that the cwd is the build directory
-const project = path.dirname(__dirname)
+const project = path.dirname(import.meta.dirname)
 const submodule = path.join(project, 'src/hunspell')
 const patchFile = path.join(project, 'patches', '001-static-cast.patch')
 const stampFile = process.argv[2]
