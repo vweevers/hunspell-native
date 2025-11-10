@@ -1,6 +1,6 @@
 {
   "name": "hunspell-native",
-  "version": "3.0.6",
+  "version": "0.0.1",
   "description": "Cross-platform Node.js binding for Hunspell, the spellcheck library used by LibreOffice, Firefox, Chrome and Adobe.",
   "author": "Vincent Weevers",
   "license": "MIT",
