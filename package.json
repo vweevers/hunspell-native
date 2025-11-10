@@ -7,6 +7,18 @@
   "type": "module",
   "main": "index.js",
   "types": "src/index.d.ts",
+  "files": [
+    "patches",
+    "scripts",
+    "src",
+    "!src/hunspell/msvc/",
+    "!src/hunspell/tests/",
+    "!src/hunspell/.travis.yml",
+    "!src/hunspell/appveyor.yml",
+    "binding.gyp",
+    "CHANGELOG.md",
+    "index.js"
+  ],
   "dependencies": {
     "node-addon-api": "8.5.0"
   },
