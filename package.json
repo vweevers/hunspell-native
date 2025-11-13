@@ -9,6 +9,7 @@
   "types": "src/index.d.ts",
   "files": [
     "patches",
+    "prebuilds",
     "scripts",
     "src",
     "!src/hunspell/msvc/",
@@ -19,20 +20,29 @@
     "CHANGELOG.md",
     "index.js"
   ],
+  "scripts": {
+    "install": "node-gyp-build",
+    "test": "eslint && node test/index.js",
+    "test-watch": "node --test --watch test/index.js",
+    "test-prebuild": "cross-env PREBUILDS_ONLY=1 npm t",
+    "rebuild": "npm run install --build-from-source",
+    "prebuild": "prebuildify --napi --strip",
+    "download-prebuilds": "prebuildify-ci download"
+  },
   "dependencies": {
-    "node-addon-api": "8.5.0"
+    "node-addon-api": "^8.5.0",
+    "node-gyp-build": "^4.8.4"
   },
   "devDependencies": {
     "@types/node": "^24.10.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.1",
     "neostandard": "^0.12.2",
+    "node-gyp": "^11.5.0",
+    "prebuildify": "^6.0.1",
+    "prebuildify-ci": "^1.0.5",
+    "prebuildify-cross": "github:prebuild/prebuildify-cross#40eca0c",
     "typescript": "^5.9.3"
-  },
-  "scripts": {
-    "build": "node-gyp rebuild -j 8",
-    "build-debug": "node-gyp rebuild -j 8 --debug",
-    "test": "eslint && node test/index.js",
-    "test-watch": "node --test --watch test/index.js"
   },
   "engines": {
     "node": ">=22"

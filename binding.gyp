@@ -2,14 +2,35 @@
   "targets": [{
     "target_name": "HunspellBinding",
     "sources": [ "src/index.cc" ],
-    "include_dirs": [
-      "<!@(node -p \"require('node-addon-api').include\")"
-    ],
     "dependencies": [
-      "<!(node -p \"require('node-addon-api').gyp\")",
+      "<!(node -p \"require('node-addon-api').targets\"):node_addon_api",
       "hunspell"
     ],
-    "defines": ["NAPI_DISABLE_CPP_EXCEPTIONS"]
+    "conditions": [
+      ["OS == 'mac'", {
+        "cflags+": ["-fvisibility=hidden"],
+        "xcode_settings": {
+          # -fvisibility=hidden
+          # See https://github.com/nodejs/node-addon-api/pull/460
+          "GCC_SYMBOLS_PRIVATE_EXTERN": "YES",
+
+          # Set minimum target version because we're building on newer
+          # Same as https://github.com/nodejs/node/blob/v22.0.0/common.gypi#L598
+          "MACOSX_DEPLOYMENT_TARGET": "11.0",
+
+          # Build universal binary to support M1 (Apple silicon)
+          # Background: https://github.com/Level/leveldown/pull/781
+          "OTHER_CFLAGS": [
+            "-arch x86_64",
+            "-arch arm64"
+          ],
+          "OTHER_LDFLAGS": [
+            "-arch x86_64",
+            "-arch arm64"
+          ]
+        }
+      }]
+    ]
   }, {
     "target_name": "hunspell",
     "type": "static_library",
@@ -20,6 +41,18 @@
       "include_dirs": ["src/hunspell/src/hunspell"],
       "defines": ["HUNSPELL_STATIC"],
     },
+    "conditions": [
+      ["OS == 'mac'", {
+        "xcode_settings": {
+          # See above
+          "MACOSX_DEPLOYMENT_TARGET": "11.0",
+          "OTHER_CFLAGS": [
+            "-arch x86_64",
+            "-arch arm64"
+          ]
+        }
+      }]
+    ],
     "sources": [
       "src/hunspell/src/hunspell/affentry.cxx",
       "src/hunspell/src/hunspell/affentry.hxx",

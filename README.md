@@ -2,6 +2,9 @@
 
 **Cross-platform Node.js binding for [Hunspell](https://hunspell.github.io/), the spellcheck library used by LibreOffice, Firefox, Chrome and Adobe.**
 
+[![npm status](http://img.shields.io/npm/v/hunspell-native.svg)](https://www.npmjs.org/package/hunspell-native)
+[![node](https://img.shields.io/node/v/hunspell-native.svg)](https://www.npmjs.org/package/hunspell-native)
+![Test](https://github.com/vweevers/hunspell-native/workflows/Test/badge.svg?branch=main)
 [![Standard](https://img.shields.io/badge/standard-informational?logo=javascript\&logoColor=fff)](https://standardjs.com)
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
@@ -36,7 +39,7 @@ const isCorrect = hunspell.spellSync('color')
 const suggestions = hunspell.suggestSync('color')
 ```
 
-The companion `language-packages` package provides on-demand downloads of [`wooorm/dictionaries`](https://github.com/wooorm/dictionaries) which covers 42+ languages.
+The companion [`language-packages`](https://github.com/vweevers/language-packages) package provides on-demand downloads of [`wooorm/dictionaries`](https://github.com/wooorm/dictionaries).
 
 ## Background
 
@@ -45,7 +48,7 @@ This is a fork of [`nodehun-native`](https://github.com/bjarkebech/nodehun-nativ
 - The `nspell` package suffers from memory leaks (gigabytes) on certain dictionaries. It's great for English but not suitable for multilingual use.
 - The `nodehun` package uses an unmaintained fork of Hunspell that works with buffers instead of reading dictionaries from disk. It has a race condition on startup that can cause all words to be treated as incorrect (at least on German).
 - The `nodehun-native` package went back to using file paths and updated to the latest and official version of Hunspell (1.7.2).
-- This `hunspell-native` package adds ESM support, Windows support, CI/CD, and prebuilt binaries.
+- This `hunspell-native` package adds ESM support, Windows support and prebuilt binaries for a variety of platforms.
 
 ## Install
 
@@ -55,15 +58,13 @@ With [npm](https://npmjs.org) do:
 npm install hunspell-native
 ```
 
-The npm package ships with prebuilt binaries for Linux, Mac and Windows. Upon install, [`node-gyp-build`](https://github.com/prebuild/node-gyp-build) will check if a compatible binary exists and fallback to compiling from source if it doesn't. In that case you'll need a [valid `node-gyp` installation](https://github.com/nodejs/node-gyp#installation).
+The npm package ships with prebuilt binaries for Linux, Mac and Windows, both x64 and ARM (except Linux ARM which fails to compile; help is welcome) including Alpine, and Linux flavors with an old glibc (2.28). Upon install, [`node-gyp-build`](https://github.com/prebuild/node-gyp-build) will check if a compatible binary exists and fallback to compiling from source if it doesn't. In that case you'll need a [valid `node-gyp` installation](https://github.com/nodejs/node-gyp#installation).
 
 If you don't want to use the prebuilt binary for the platform you are installing on, specify the `--build-from-source` flag when you install:
 
 ```
 npm install hunspell-native --build-from-source
 ```
-
-Please open an issue if you need prebuilt binaries for ARM, M1, Alpine (musl), Windows 32-bit or Linux flavors with an old glibc; I'm willing to add these if there's someone to test it.
 
 ## API
 
@@ -229,7 +230,7 @@ git submodule update --init --recursive
 
 ### Building
 
-Build the native addon with `npm run build`, or with `npm install` if you didn't already install dependencies.
+Build the native addon with `npm run rebuild`, or with `npm install` if you didn't already install dependencies.
 
 Note: the build process applies a [patch](./patches/001-static-cast.patch) to the hunspell submodule to replace `dynamic_cast` with `static_cast`, removing the need for RTTI. If compiling succeeds, the patch is reverted, keeping the submodule clean.
 
