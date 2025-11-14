@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1] - 2025-11-14
+
+### Fixed
+
+- Include hunspell source code in package ([`c2ab3bd`](https://github.com/vweevers/hunspell-native/commit/c2ab3bd)) (Vincent Weevers)
+
 ## [1.0.0] - 2025-11-14
 
 ### Changed
@@ -13,6 +19,8 @@
 ## [0.0.1] - 2025-11-14
 
 _:seedling: Initial release. Does not include prebuilt binaries yet._
+
+[1.0.1]: https://github.com/vweevers/hunspell-native/releases/tag/v1.0.1
 
 [1.0.0]: https://github.com/vweevers/hunspell-native/releases/tag/v1.0.0
 
