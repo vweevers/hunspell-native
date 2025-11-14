@@ -48,14 +48,6 @@
   "engines": {
     "node": ">=22"
   },
-  "contributors": [
-    "Nathan Sweet <nathanjsweet@gmail.com>",
-    "Haris Khan <hk12@live.ca>",
-    "Titus Wormer <tituswormer@gmail.com>",
-    "Espen Hovlandsdal <espen@hovlandsdal.com>",
-    "Thomas Beverley <tom.beverley101@gmail.com>",
-    "Bjarke Bech <bjarkebech@gmail.com>"
-  ],
   "repository": "https://github.com/vweevers/hunspell-native",
   "bugs": "https://github.com/vweevers/hunspell-native/issues",
   "gypfile": true,
