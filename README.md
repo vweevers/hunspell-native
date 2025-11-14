@@ -4,7 +4,7 @@
 
 [![npm status](http://img.shields.io/npm/v/hunspell-native.svg)](https://www.npmjs.org/package/hunspell-native)
 [![node](https://img.shields.io/node/v/hunspell-native.svg)](https://www.npmjs.org/package/hunspell-native)
-![Test](https://github.com/vweevers/hunspell-native/workflows/Test/badge.svg?branch=main)
+[![Test](https://img.shields.io/github/actions/workflow/status/vweevers/hunspell-native/test.yml?branch=main\&label=test)](https://github.com/vweevers/hunspell-native/actions/workflows/test.yml)
 [![Standard](https://img.shields.io/badge/standard-informational?logo=javascript\&logoColor=fff)](https://standardjs.com)
 [![Common Changelog](https://common-changelog.org/badge.svg)](https://common-changelog.org)
 
