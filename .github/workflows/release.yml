@@ -1,7 +1,7 @@
 name: Release
 on:
   push:
-    tags: ['*']
+    tags: ['v*']
 jobs:
   build:
     permissions:
@@ -48,19 +48,19 @@ jobs:
         run: npm install --ignore-scripts
       - name: Prebuild
         run: npx --no-install ${{ matrix.cmd }}
-      - name: Prepare artifact
-        run: tar -zcvf $BUILD_GROUP.tar.gz -C prebuilds .
-        shell: bash
       - name: Upload artifact
         uses: actions/upload-artifact@v5
         with:
           name: ${{ env.BUILD_GROUP }}
-          path: ${{ env.BUILD_GROUP }}.tar.gz
+          path: prebuilds
+          if-no-files-found: error
           retention-days: 1
   release:
     needs: build
     permissions:
       contents: write
+      # https://docs.npmjs.com/trusted-publishers
+      id-token: write
     runs-on: ubuntu-latest
     name: Release
     steps:
@@ -69,10 +69,15 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v6
         with:
-          path: artifacts
+          path: prebuilds
+          merge-multiple: true
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+      - name: Publish
+        run: npm publish
       - name: Create GitHub release
         uses: docker://antonyurchenko/git-release:v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: artifacts/*/*.tar.gz
