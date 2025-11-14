@@ -16,4 +16,5 @@ if (existsSync(path.join(hunspell, '.git'))) {
 }
 
 // For incremental builds
+// @ts-expect-error
 writeFileSync(stampFile, '')
