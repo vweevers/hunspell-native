@@ -49,7 +49,7 @@ jobs:
       - name: Prebuild
         run: npx --no-install ${{ matrix.cmd }}
       - name: Upload artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ env.BUILD_GROUP }}
           path: prebuilds
